@@ -1,0 +1,268 @@
+<!DOCTYPE	html>
+<html	lang="en">
+<head>
+  <script src="https://use.fontawesome.com/71406e116a.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-sale=1.0">
+  <title>SavageRage.com</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Red+Hat+Mono:wght@300&display=swap');
+    
+    audio {
+      display: none;
+    }
+
+
+    button {
+      font-size: 22px;
+      color: #eee;
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+	    height: 40px;
+      padding: 5px;
+      border: none;
+      border-radius: 2px;
+      outline: none;
+      background: black;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+      opacity: 0.8;
+      cursor: pointer;
+      transition: all 0.4s ease-out;
+    }
+
+    button.fade:hover {
+      opacity: 0.8;
+    }
+
+    .fade {
+      opacity: 0.2;
+      top: 0;
+      left: 0;
+      transform: translate(0, 0);
+    }
+    img { max-width: 100%; height: auto; }
+    
+  </style>
+</head>
+<body style="background-color:black;">
+
+
+  <audio loop src="mine_dimonds.mp3" type="audio/mp3"></audio>
+  <button id="button">
+    <i class="fa fa-volume-up"></i>
+  
+  <script>
+    const button = document.querySelector("#button");
+    const icon = document.querySelector("#button > i");
+    const audio = document.querySelector("audio");
+
+    button.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.volume = 0.2;
+        audio.play();
+        icon.classList.remove('fa-volume-up');
+        icon.classList.add('fa-volume-off');
+      } else {
+        audio.pause();
+        icon.classList.remove('fa-volume-off');
+        icon.classList.add('fa-volume-up');
+      }
+      button.classList.add("fade");
+    });
+  </script>
+  </button>
+  
+  
+  
+<div style="display:flex;width: 100%" class="typewriter">
+  <div style="flex: 1"></div>
+  <p style="font-family:'Red Hat Mono';color:white;font-size:64px">SavageRage.com</p>
+  <div style="flex: 1"></div>
+</div>
+    
+<script>
+  //constants
+  //const COLOR_BG = "red"
+  const COLOR_CUBE = "lime"
+  const SPEED_X = 0.05; // rotations per second
+  const SPEED_Y = 0.15;
+  const SPEED_Z = 0.10;
+  const POINT3D = function(x, y, z) { this.x = x; this.y = y; this.z = z; };
+  
+  // set up the canvas and context
+  var canvas = document.createElement("canvas");
+  document.body.appendChild(canvas);
+  var ctx = canvas.getContext("2d");
+  
+  // dimensions
+  var h = document.documentElement.clientHeight-85;
+  var w = document.documentElement.clientWidth;
+  canvas.height = h;
+  canvas.width = w;
+
+  // colors and lines
+  //ctx.fillStyle = COLOR_BG;
+  ctx.strokeStyle = COLOR_CUBE;
+  ctx.lineWidth = w / 100;
+  ctx.lineCap = "round";
+  
+  // cube parameters
+  var cx = w / 2;
+  var cy = h / 2;
+  var cz = 0;
+  var size = (h+85)/6;
+  var vertices = [
+    new POINT3D(cx - size, cy - size, cz - size),
+    new POINT3D(cx + size, cy - size, cz - size),
+    new POINT3D(cx + size, cy + size, cz - size),
+    new POINT3D(cx - size, cy + size, cz - size),
+    new POINT3D(cx - size, cy - size, cz + size),
+    new POINT3D(cx + size, cy - size, cz + size),
+    new POINT3D(cx + size, cy + size, cz + size),
+    new POINT3D(cx - size, cy + size, cz + size),
+  ];
+  var edges = [
+    [0,1], [1,2], [2,3], [3,0], // back face
+    [4,5], [5,6], [6,7], [7,4], // front face
+    [0,4], [1,5], [2,6], [3,7], // connecting sides
+  ];
+  
+  // set up the animation loop
+  var timeDelta, timeLast = 0;
+  requestAnimationFrame(loop)
+  
+  function loop(timeNow) {
+    // calculate the diference
+    timeDelta = timeNow - timeLast;
+    timeLast = timeNow;
+    
+    // background
+    //ctx.fillStyle = "black";
+    //ctx.fillRect(0, 0, w, h);
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // rotate the cube along the Z axis
+    let angle = timeDelta * 0.001 * SPEED_Z * Math.PI * 2;
+    for (let v of vertices) {
+      let dx = v.x - cx;
+      let dy = v.y - cy;
+      let x = dx * Math.cos(angle) - dy * Math.sin(angle);
+      let y = dx * Math.sin(angle) + dy * Math.cos(angle);
+      v.x = x + cx;
+      v.y = y + cy;
+    }
+    
+    
+    // rotate the cube along the X axis
+    angle = timeDelta * 0.001 * SPEED_X * Math.PI * 2;
+    for (let v of vertices) {
+      let dy = v.y - cy;
+      let dz = v.z - cz;
+      let y = dy * Math.cos(angle) - dz * Math.sin(angle);
+      let z = dy * Math.sin(angle) + dz * Math.cos(angle);
+      v.y = y + cy;
+      v.z = z + cz;
+    }
+    
+    // rotate the cube along the Y axis
+    angle = timeDelta * 0.001 * SPEED_Y * Math.PI * 2;
+    for (let v of vertices) {
+      let dx = v.x - cx;
+      let dz = v.z - cz;
+      let x = dz * Math.sin(angle) + dx * Math.cos(angle);
+      let z = dz * Math.cos(angle) - dx * Math.sin(angle);
+      v.x = x + cx;
+      v.z = z + cz;
+    }
+    ctx.globalAlpha = 1;
+    ctx.textAlign = "center";
+    
+    ctx.fillStyle = "lime";
+    ctx.font = "30px Red Hat Mono";
+    ctx.fillText("Conntact_Me/", canvas.width/2+size*4, canvas.height/2-35);
+    ctx.fillText("My_Work/", canvas.width/2, canvas.height/2-35);
+    ctx.fillText("About_Me/", canvas.width/2-size*4, canvas.height/2-35);
+  
+    ctx.globalAlpha = 0.5;
+    // draw each edge of cube 1 (mid)
+    for (let edge of edges) {
+      ctx.beginPath();
+      ctx.moveTo(vertices[edge[0]].x, vertices[edge[0]].y-35);
+      ctx.lineTo(vertices[edge[1]].x, vertices[edge[1]].y-35);
+      ctx.stroke();
+    }
+    
+    // draw each edge of cube 2 (far right)
+    for (let edge of edges) {
+      ctx.beginPath();
+      ctx.moveTo(vertices[edge[0]].x+size*4, vertices[edge[0]].y-35);
+      ctx.lineTo(vertices[edge[1]].x+size*4, vertices[edge[1]].y-35);
+      ctx.stroke();
+    }
+    
+    // draw each edge of cube 2 (far left)
+    for (let edge of edges) {
+      ctx.beginPath();
+      ctx.moveTo(vertices[edge[0]].x-size*4, vertices[edge[0]].y-34);
+      ctx.lineTo(vertices[edge[1]].x-size*4, vertices[edge[1]].y-34);
+      ctx.stroke();
+    }
+
+
+    requestAnimationFrame(loop);
+  }
+
+  //Function to get the mouse position
+  function getMousePos(canvas, event) {
+      var rect = canvas.getBoundingClientRect();
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
+    }
+    //Function to check whether a point is inside a rectangle
+    function isInside(pos, rect){
+      return pos.x > rect.x && pos.x < rect.x+rect.width && pos.y < rect.y+rect.height && pos.y > rect.y
+    }
+
+    var rect = { // far left
+      x:canvas.width/2-size*4-size,
+      y:canvas.height/2-size*2+50,
+      width:size*2,
+      height:size*2
+    };
+    var rect1 = { // mid
+      x:canvas.width/2-size,
+      y:canvas.height/2-size*2+50,
+      width:size*2,
+      height:size*2
+    };
+    var rect2 = { // far right
+      x:canvas.width/2+size*4-size,
+      y:canvas.height/2-size*2+50,
+      width:size*2,
+      height:size*2
+    };
+    
+    //Binding the click event on the canvas
+    canvas.addEventListener('click', function(evt) {
+      var mousePos = getMousePos(canvas, evt);
+
+      if (isInside(mousePos,rect)) {
+        //window.open("https://twitter.com/savage_rage",'_blank');
+        location.href = "pages/About_Me.html"
+      } else if (isInside(mousePos,rect1)) {
+        //window.open("https://savagerage.newgrounds.com/",'_blank');
+      } else if (isInside(mousePos,rect2)) {
+        //window.open("https://github.com/SavageRage69",'_blank');
+      }
+    }, false);
+  
+</script>
+</body>
+</html>

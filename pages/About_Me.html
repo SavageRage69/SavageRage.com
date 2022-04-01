@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About_Me/</title>
+
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Red+Hat+Mono:wght@300&display=swap');
+    
+    body {
+      margin: 0;
+      overflow: hidden; /* Hide scrollbars */
+      opacity: 0;
+      transition: opacity 7s;
+    }
+    
+    #list {
+      font: arial;
+      font-size: 14px;
+      background-color: rgb(245, 245, 214);
+      word-break: break-word;
+      border: 5px solid #FFFF00;
+      width: 50%;
+      height: 60%;
+      margin-left:auto;margin-right:auto;
+    }
+    
+  </style>
+</head>
+
+<body onload="init(); document.body.style.opacity='1'" style="margin: 0; padding: 0; background-color: #000000;">
+  
+  <canvas id="canvas" width="100" height="100" style="display:block; margin:0 auto;"></canvas>
+  
+  <script>
+    var tileSize = 20;
+    // a higher fade factor will make the characters fade quicker
+    var fadeFactor = 0.1;
+    
+    var canvas;
+    var ctx;
+    
+    var columns = [];
+    var maxStackHeight;
+    
+    function init() {
+      canvas = document.getElementById('canvas');
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      ctx = canvas.getContext('2d');
+        
+      initMatrix();
+      
+      // start the main loop
+      tick();
+    }
+    
+    function initMatrix() {
+      maxStackHeight = Math.ceil(canvas.height/tileSize);
+      
+      // divide the canvas into columns
+      for ( let i = 0 ; i < canvas.width/tileSize ; ++i ) {
+        var column = {};
+        // save the x position of the column
+        column.x = i*tileSize;
+        // create a random stack height for the column
+        column.stackHeight = 10+Math.random()*maxStackHeight;
+        // add a counter to count the stack height
+        column.stackCounter = 0;
+        // add the column to the list
+        columns.push( column );
+      }
+    }
+    
+    function draw() {
+      // draw a semi transparent black rectangle on top of the scene to slowly fade older characters
+      ctx.fillStyle = "rgba( 0 , 0 , 0 , "+fadeFactor+" )";
+      ctx.fillRect( 0 , 0 , canvas.width , canvas.height );
+  
+      // pick a font slightly smaller than the tile size
+      ctx.font = (tileSize-2)+"px monospace";
+      ctx.fillStyle = "rgb( 0 , 255 , 0 )";
+      for ( let i = 0 ; i < columns.length ; ++i ) {
+        // pick a random ascii character (change the 94 to a higher number to include more characters)
+        var randomCharacter = String.fromCharCode( 33+Math.floor(Math.random()*94) );
+        ctx.fillText( randomCharacter , columns[i].x , columns[i].stackCounter*tileSize+tileSize );
+      
+        // if the stack is at its height limit, pick a new random height and reset the counter
+        if ( ++columns[i].stackCounter >= columns[i].stackHeight ) {
+          columns[i].stackHeight = 10+Math.random()*maxStackHeight;
+          columns[i].stackCounter = 0;
+        }
+      }
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 2
+      ctx.moveTo(canvas.width/96*6, canvas.height/96*30);
+      ctx.lineTo(canvas.width/96*12, canvas.height/96*8);
+      ctx.moveTo(canvas.width/96*12, canvas.height/96*8);
+      ctx.lineTo(canvas.width/96*35, canvas.height/96*8);
+      ctx.fillStyle = "red";
+      ctx.font = "14px Red Hat Mono";
+      if (box1==true) {
+        //ctx.fillStyle = "red";
+        //ctx.fillRect((canvas.width/96)*12, ((canvas.height/96)*6), (canvas.width/96)*23, (canvas.height/96)*4);
+        ctx.fillStyle = "black";
+        ctx.fillRect((canvas.width/96)*12, (canvas.height/96)*8, (canvas.width/96)*23, (canvas.height/96)*50);
+        ctx.fillStyle = "white";
+        ctx.rect((canvas.width/96)*12, (canvas.height/96)*8, (canvas.width/96)*23, (canvas.height/96)*50);
+
+        ctx.fillText("Hello World\nlololo", 10, 50);
+      }
+      ctx.stroke();
+      
+      //Function to get the mouse position
+      //Function to get the mouse position
+    }
+    
+    
+    
+    // MAIN LOOP
+    function tick() {
+      draw();
+      setTimeout( tick , 50 );
+    }
+  </script>
+  
+  <script>
+  
+    box1 = false
+  
+    function getMousePos(canvas, event) {
+	  var rect = canvas.getBoundingClientRect();
+	    return {
+		    x: event.clientX - rect.left,
+		    y: event.clientY - rect.top
+	    };
+    }
+    function isInside(pos, rect){
+	  return pos.x > rect.x && pos.x < rect.x+rect.width && pos.y < rect.y+rect.heigth && pos.y > rect.y
+    }
+
+    var canvas = document.getElementById('canvas');
+    var ctxs = canvas.getContext('2d');
+    var rect = {
+	    x:(window.innerWidth/96)*12,
+	    y:(window.innerHeight/96)*6,
+	    width:(window.innerWidth/96)*23,
+	    heigth:(window.innerHeight/96)*4
+    };
+
+    canvas.addEventListener('click', function(evt) {
+	    var mousePos = getMousePos(canvas, evt);
+	    if (isInside(mousePos,rect)) {
+		    if (box1==false) {
+		      box1=true
+		    } else {
+		      box1=false
+		    }
+      }
+    }, false);
+
+  </script>
+  
+  <div id="list">
+    <!--
+    <button style="position: absolute; top:200px; left:100px;" onclick="myFunction()">Click</button>
+    -->
+    <p><iframe src="README.txt" style="position: absolute; top:200px; left:100px;"></iframe></p>
+  </div>
+</body>
+
+</html>
