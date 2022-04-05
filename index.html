@@ -50,7 +50,6 @@
 </head>
 <body style="background-color:black;">
 
-
   <audio loop src="mine_dimonds.mp3" type="audio/mp3"></audio>
   <button id="button">
     <i class="fa fa-volume-up"></i>
@@ -254,11 +253,18 @@
         location.href = "pages/About_Me.html"
       } else if (isInside(mousePos,rect1)) {
         //window.open("https://savagerage.newgrounds.com/",'_blank');
+        location.href = "pages/My_Work.html"
       } else if (isInside(mousePos,rect2)) {
         //window.open("https://github.com/SavageRage69",'_blank');
+        location.href = "pages/Contact_Me.html"
       }
     }, false);
   
 </script>
+
+  <!-- pre loading web pages, make this more effective later since now all load is placed on first page -->
+  <iframe style="display:none;" src="pages/About_Me.html"></iframe>
+  <iframe style="display:none;" src="pages/My_work.html"></iframe>
+  <iframe style="display:none;" src="pages/Contact_Me.html"></iframe>
 </body>
 </html>

@@ -1,24 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Red+Hat+Mono:wght@300&display=swap');
 
-.parent-parent {
+#wrapper {
   position: absolute;
   top: 0;
   left: 0;
-}
-
-.parent {
+  width: 100vw;
   display: flex;
-  width: 400px;
-  margin: 50px;
+  flex-wrap: wrap;
+  padding-left: 0;
 }
 
 .image {
   position: relative;
-  
+  margin: 65px;
+  width: calc(33.33333%-200px);
 }
 
 .image__img {
-  display: block;
   width: 100%;
 }
 
