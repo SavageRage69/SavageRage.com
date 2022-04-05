@@ -7,13 +7,16 @@
   width: 100vw;
   display: flex;
   flex-wrap: wrap;
-  padding-left: 0;
+  justify-content: space-between;
 }
 
 .image {
   position: relative;
-  margin: 65px;
-  width: calc(33.33333%-200px);
+  flex: 0 24%;
+  margin-top: 2%;
+  margin-bottom: 2%; /* (100-32*3)/2 */
+  margin-left: 4%;
+  margin-right: 4%;
 }
 
 .image__img {
@@ -60,4 +63,8 @@
   text-align: center;
   font-size: 1.25em;
   margin-top: 0.25em;
+}
+
+canvas {
+  background-attachment: fixed;
 }
